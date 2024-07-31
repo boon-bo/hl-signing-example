@@ -1,9 +1,20 @@
 'use client';
 import { MAINNET_API_URL } from '@/constants';
-import { getTimestampMs, hashAction, signStandardL1Action } from '@/signing';
+import {
+  getTimestampMs,
+  hashAction,
+  signStandardL1Action,
+  splitSig,
+} from '@/signing';
 import { Exchange } from '@/exchange';
 import { useEffect, useState } from 'react';
 import { useSignTypedData } from 'wagmi';
+
+type Signature = {
+  r: string;
+  s: string;
+  v: number;
+};
 
 export default function Home() {
   const [message, setMessage] = useState('');
@@ -50,12 +61,11 @@ export default function Home() {
 
   const handleSign = async () => {
     signTypedData(payloadToSign);
-    // signStandardL1Action(action, wallet, null, timestamp);
   };
 
   useEffect(() => {
     if (isSuccess) {
-      exchange.postAction(action, data, timestamp);
+      exchange.postAction(action, splitSig(data), timestamp);
     }
   }, [action, data, exchange, isSuccess, timestamp]);
 

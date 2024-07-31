@@ -68,7 +68,7 @@ function addressToBytes(address: string): Uint8Array {
   return Uint8Array.from(Buffer.from(hex, 'hex'));
 }
 
-function splitSig(sig: string): Signature {
+export function splitSig(sig: string): Signature {
   sig = sig.slice(2);
   if (sig.length !== 130) {
     throw new Error(`bad sig length: ${sig.length}`);
